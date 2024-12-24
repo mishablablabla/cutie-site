@@ -1,0 +1,286 @@
+body {
+  background-color: #ffe6f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: "Comic Sans MS", cursive;
+  overflow: hidden; /* Чтобы скрыть сердечки, выходящие за пределы экрана */
+}
+.counter {
+  font-size: 24px;
+  color: rgb(193, 45, 136);
+  text-align: center;
+  margin-top: 20px;
+}
+.counters {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #ff69b4;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.counters div {
+  margin-bottom: 5px;
+}
+
+/* Основной контейнер */
+.burger-menu {
+  position: relative;
+  z-index: 1000;
+}
+
+/* Бургер-кнопка (изначально отображается, пока меню закрыто) */
+.burger-button {
+  position: fixed;
+  top: 15px;
+  left: 70px;
+  background-color: #ff66b2;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  z-index: 1000; /* Поверх контента */
+}
+
+.burger-button:hover {
+  background-color: #ff3385;
+  transform: scale(1.1);
+}
+
+/* Задний слой (для затемнения контента) */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 999; /* Под меню, но над контентом */
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Меню */
+.burger-nav {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Скрытое меню */
+  width: 250px;
+  height: 100%;
+  background: linear-gradient(135deg, #ff66b2, #ff3385);
+  color: white;
+  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  transition: left 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 1001;
+}
+
+/* Кнопка "Закрыть" внутри меню */
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: 26px;
+  right: 10px;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #ffe6f2;
+}
+
+/* Список ссылок */
+.burger-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 60px 0 0; /* Отступ, чтобы ссылки не накладывались на кнопку */
+}
+
+.burger-nav li {
+  margin-bottom: 20px;
+}
+
+.burger-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.burger-nav a:hover {
+  color: #ffe6f2;
+}
+
+/* Открытое меню */
+.burger-nav.active {
+  left: 0;
+}
+
+.love {
+  width: 300px;
+  height: 100px;
+  font-size: 25px;
+  margin-top: 100px;
+  color: white;
+  background-color: #ff66b2;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.love:hover {
+  background-color: #ff3385;
+  transform: scale(1.05);
+}
+
+.notification {
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ff3385;
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.notification.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Стили для анимации сердечек */
+.heart {
+  position: absolute;
+  width: 30px; /* Установите желаемый размер сердечка */
+  height: 30px;
+  background-image: url("../heart.png"); /* Путь к изображению */
+  background-size: cover;
+  pointer-events: none; /* Чтобы сердечки не мешали кликам */
+  animation: float 1.5s forwards;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
+
+.heart-counter {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #ff69b4;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для страницы со счётчиком времени */
+.time-counter-page {
+  text-align: center;
+  padding: 20px;
+  background-color: #ffe6f2;
+  color: #ff3385;
+  font-family: "Comic Sans MS", cursive;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.counter-title {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #ff66b2;
+  text-shadow: 2px 2px #ffffff;
+}
+
+.time-display {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.time-unit {
+  text-align: center;
+  font-size: 24px;
+  color: #ff3385;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.time-unit span {
+  display: block;
+}
+
+.time-unit:hover {
+  transform: scale(1.1);
+  background-color: #ff66b2;
+  color: white; /* Меняем цвет текста и числа */
+}
+
+.time-unit:hover .unit-label {
+  color: white; /* Указываем, что вложенные подписи тоже меняют цвет */
+}
+
+.unit-label {
+  font-size: 14px;
+  margin-top: 5px;
+  color: #ff69b4;
+}
+
+.back-button {
+  margin-top: 30px;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  background-color: #ff66b2;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #ff3385;
+}
