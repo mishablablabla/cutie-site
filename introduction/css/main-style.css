@@ -8,12 +8,14 @@ body {
   font-family: "Comic Sans MS", cursive;
   overflow: hidden; /* Чтобы скрыть сердечки, выходящие за пределы экрана */
 }
+
 .counter {
   font-size: 24px;
   color: rgb(193, 45, 136);
   text-align: center;
   margin-top: 20px;
 }
+
 .counters {
   position: absolute;
   top: 10px;
