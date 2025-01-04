@@ -5,7 +5,9 @@ window.addEventListener("DOMContentLoaded", () => {
     inputAmount = document.querySelector("#inputAmount"),
     outputAmount = document.querySelector("#outputAmount"),
     notification = document.querySelector(".notification"),
-    clearBtn = document.querySelector(".clear-button");
+    clearBtn = document.querySelector(".clear-button"),
+    numberNotification = document.querySelector(".second_notification"),
+    thirdNotification = document.querySelector(".third_notification");
 
   window.addEventListener("keydown", (event) => {
     event.preventDefault();
@@ -33,7 +35,17 @@ window.addEventListener("DOMContentLoaded", () => {
   clearBtn.addEventListener("click", clearing);
 
   function convertation() {
-    if (currencySelect.value === resultCureencySelect.value) {
+    console.log(currencySelect.value);
+    if (
+      currencySelect.value === "Value" ||
+      resultCureencySelect.value === "Value"
+    ) {
+      thirdNotification.classList.add("show");
+
+      setTimeout(() => {
+        thirdNotification.classList.remove("show");
+      }, 2000);
+    } else if (currencySelect.value === resultCureencySelect.value) {
       notification.classList.add("show");
 
       setTimeout(() => {
@@ -44,9 +56,16 @@ window.addEventListener("DOMContentLoaded", () => {
       inputAmount.value <= 0 ||
       isNaN(inputAmount.value)
     ) {
-      outputAmount.value = "Введите число";
+      numberNotification.classList.add("show");
+
+      inputAmount.placeholder = "Введите число";
+
+      setTimeout(() => {
+        numberNotification.classList.remove("show");
+      }, 2000);
       return;
     } else {
+      debugger;
       let inputCurrency = currencySelect.value,
         outputCurrency = resultCureencySelect.value;
 
@@ -87,6 +106,8 @@ window.addEventListener("DOMContentLoaded", () => {
   function clearing() {
     inputAmount.placeholder = "Введите число";
     outputAmount.placeholder = "Результат";
+    inputAmount.value = null;
+    outputAmount.value = null;
     currencySelect.selectedIndex = 0;
     resultCureencySelect.selectedIndex = 0;
   }

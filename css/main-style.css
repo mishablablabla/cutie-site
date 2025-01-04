@@ -1,6 +1,6 @@
 body {
-  /* background-image: url(../img/background.webp); */
-  background-color: #ffe6f2;
+  background-image: url(../img/backgr1.jpg);
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,13 +33,11 @@ body {
   margin-bottom: 5px;
 }
 
-/* Основной контейнер */
 .burger-menu {
   position: relative;
   z-index: 1000;
 }
 
-/* Бургер-кнопка (изначально отображается, пока меню закрыто) */
 .burger-button {
   position: fixed;
   top: 15px;
@@ -52,7 +50,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: transform 0.3s ease, background 0.3s ease;
-  z-index: 1000; /* Поверх контента */
+  z-index: 1000;
 }
 
 .burger-button:hover {
@@ -60,7 +58,6 @@ body {
   transform: scale(1.1);
 }
 
-/* Задний слой (для затемнения контента) */
 .overlay {
   position: fixed;
   top: 0;
@@ -71,7 +68,7 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 999; /* Под меню, но над контентом */
+  z-index: 999;
 }
 
 .overlay.active {
@@ -79,11 +76,10 @@ body {
   visibility: visible;
 }
 
-/* Меню */
 .burger-nav {
   position: fixed;
   top: 0;
-  left: -250px; /* Скрытое меню */
+  left: -250px;
   width: 250px;
   height: 100%;
   background: linear-gradient(135deg, #ff66b2, #ff3385);
@@ -94,7 +90,6 @@ body {
   z-index: 1001;
 }
 
-/* Кнопка "Закрыть" внутри меню */
 .close-button {
   background: none;
   border: none;
@@ -111,11 +106,10 @@ body {
   color: #ffe6f2;
 }
 
-/* Список ссылок */
 .burger-nav ul {
   list-style: none;
   padding: 0;
-  margin: 60px 0 0; /* Отступ, чтобы ссылки не накладывались на кнопку */
+  margin: 60px 0 0;
 }
 
 .burger-nav li {
@@ -134,7 +128,6 @@ body {
   color: #ffe6f2;
 }
 
-/* Открытое меню */
 .burger-nav.active {
   left: 0;
 }
@@ -214,15 +207,17 @@ body {
 
 .time-counter-page {
   text-align: center;
-  padding: 20px;
+  padding: 20px 30px;
   background-color: #ffe6f2;
   color: #ff3385;
+  border-radius: 20px;
   font-family: "Comic Sans MS", cursive;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4),
+    0 -5px 15px rgba(255, 105, 180, 0.2), 0 10px 30px rgba(238, 0, 255, 0.2);
 }
 
 .counter-title {
@@ -257,11 +252,11 @@ body {
 .time-unit:hover {
   transform: scale(1.1);
   background-color: #ff66b2;
-  color: white; /* Меняем цвет текста и числа */
+  color: white;
 }
 
 .time-unit:hover .unit-label {
-  color: white; /* Указываем, что вложенные подписи тоже меняют цвет */
+  color: white;
 }
 
 .unit-label {
@@ -279,9 +274,10 @@ body {
   background-color: #ff66b2;
   padding: 10px 20px;
   border-radius: 10px;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .back-button:hover {
   background-color: #ff3385;
+  transform: scale(1.1);
 }

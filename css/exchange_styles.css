@@ -114,3 +114,26 @@ input[readonly] {
   background-color: #ff3385;
   transform: scale(1.1);
 }
+
+.second_notification,
+.third_notification {
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ff3385;
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.second_notification.show,
+.third_notification.show {
+  opacity: 1;
+  visibility: visible;
+}
