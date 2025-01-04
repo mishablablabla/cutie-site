@@ -1,5 +1,4 @@
 body {
-  /* background-image: url(../img/background.webp); */
   background-color: #ffe6f2;
   display: flex;
   justify-content: center;
@@ -7,7 +6,7 @@ body {
   height: 100vh;
   margin: 0;
   font-family: "Comic Sans MS", cursive;
-  overflow: hidden;
+  overflow: hidden; /* Чтобы скрыть сердечки, выходящие за пределы экрана */
 }
 
 .counter {
@@ -179,13 +178,14 @@ body {
   visibility: visible;
 }
 
+/* Стили для анимации сердечек */
 .heart {
   position: absolute;
-  width: 30px;
+  width: 30px; /* Установите желаемый размер сердечка */
   height: 30px;
-  background-image: url("../img/heart.png");
+  background-image: url("../heart.png"); /* Путь к изображению */
   background-size: cover;
-  pointer-events: none;
+  pointer-events: none; /* Чтобы сердечки не мешали кликам */
   animation: float 1.5s forwards;
 }
 
@@ -212,6 +212,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Стили для страницы со счётчиком времени */
 .time-counter-page {
   text-align: center;
   padding: 20px;
