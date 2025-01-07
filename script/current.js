@@ -34,7 +34,7 @@ window.addEventListener("DOMContentLoaded", () => {
   converBtn.addEventListener("click", convertation);
   clearBtn.addEventListener("click", clearing);
 
-  function convertation() {
+  async function convertation() {
     console.log(currencySelect.value);
     if (
       currencySelect.value === "Value" ||
@@ -65,41 +65,32 @@ window.addEventListener("DOMContentLoaded", () => {
       }, 2000);
       return;
     } else {
-      debugger;
       let inputCurrency = currencySelect.value,
         outputCurrency = resultCureencySelect.value;
 
       outputAmount.value = "Loading...";
       converBtn.disabled = true;
 
-      fetch("../JSON/current.json")
-        .then((response) => {
-          if (!response.ok) {
-            console.log(`Ошибка: ${response.status}`);
-            throw new Error(`Ошибка: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          const exchangeRate = data[inputCurrency]?.[outputCurrency];
-          if (!exchangeRate) {
-            outputAmount.value = "Курс не найден";
-            converBtn.disabled = false;
-            return;
-          } else {
-            console.log(exchangeRate);
+      try {
+        const response = await fetch("../JSON/current.json");
+        if (!response.ok) {
+          throw new Error(`Ошибка: ${response.status}`);
+        }
+        const data = await response.json();
+        const exchangeRate = data[inputCurrency]?.[outputCurrency];
 
-            outputAmount.value = (inputAmount.value * exchangeRate).toFixed(2);
-            converBtn.disabled = false;
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          outputAmount.value = "Ошибка загрузки курса";
-        })
-        .finally(() => {
-          converBtn.disabled = false;
-        });
+        if (!exchangeRate) {
+          outputAmount.value = "Курс не найден";
+          return;
+        }
+
+        outputAmount.value = (inputAmount.value * exchangeRate).toFixed(2);
+      } catch (error) {
+        console.error(error);
+        outputAmount.value = "Ошибка загрузки курса";
+      } finally {
+        converBtn.disabled = false;
+      }
     }
   }
 
