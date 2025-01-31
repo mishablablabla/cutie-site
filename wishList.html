@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Любимый сайтик</title>
+    <link rel="icon" href="img/siteIcon.png" type="image/png" />
+    <link rel="stylesheet" href="css/main-style.css" />
+  </head>
+  <body>
+    <section class="burger__menu-section">
+      <div class="burger-menu">
+        <button class="burger-button">☰</button>
+        <nav class="burger-nav">
+          <button class="close-button">✕</button>
+          <ul>
+            <li><a href="index.html">Любимый кликер</a></li>
+            <li><a href="together.html">С 8 марта прошло уже...</a></li>
+            <li><a href="wishList.html">Wishlist <33</a></li>
+            <li><a href="#">-----</a></li>
+            <li><a href="currentChange.html">Обмен валюточек</a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <main>
+      <section class="main__section-add__wishList">
+        <div class="container">
+          <h1>Add your wish</h1>
+          <form id="taskForm">
+            <div class="form__actions">
+              <div class="titles">
+                <input
+                  type="text"
+                  id="taskTitle"
+                  name="title"
+                  placeholder="Your name"
+                  required
+                />
+                <input
+                  type="text"
+                  id="taskTitle"
+                  name="title"
+                  placeholder="Link to your wish"
+                  required
+                />
+              </div>
+
+              <input
+                type="text"
+                id="priceTitile"
+                name="title"
+                placeholder="Price"
+                required
+              />
+              <select id="wish__price-current" name="priority" required>
+                <option value="PLN">zł (PLN)</option>
+                <option value="USD">$ (USD)</option>
+                <option value="EUR">€ (EUR)</option>
+                <option value="UAH">₴ (UAH)</option>
+                <option value="KRW">₩ (KRW)</option>
+              </select>
+
+              <label for="taskPriority">Priority of your wish:</label>
+              <div class="priority__svg">
+                <div class="taskPriority-img first__heart"></div>
+                <div class="taskPriority-img second__heart"></div>
+                <div class="taskPriority-img third__heart"></div>
+              </div>
+            </div>
+
+            <button id="submit_button" type="submit">Добавить задачу</button>
+          </form>
+          <div id="responseMessage" class="hide"></div>
+        </div>
+      </section>
+
+      <section class="main__section-items__wishList">
+        <div class="items__wishList">
+          <ul class="items-list">
+            <!-- <li class="wish-item">
+              <span class="task-number">1.</span>
+              <span class="task-title">Иванка хочет</span>
+              <button class="wish_item__link">
+                <a href="https://makeup.pl/product/642077/">Подарочек :)</a>
+              </button>
+              <div class="task-actions">
+                <button class="complete-btn"></button>
+                <button class="change-btn"></button>
+                <button class="delete-btn"></button>
+              </div>
+            </li> -->
+            <li class="wish-item">
+              <span class="task-number">1.</span>
+              <span class="task-title">Иванка хочет</span>
+              <button class="wish_item__link">
+                <a
+                  class="wish_item-link"
+                  href="https://makeup.pl/product/642077/"
+                  >подарочек :)</a
+                >
+              </button>
+              <label for="taskPriority">Priority : </label>
+              <div class="priority__svg">
+                <div
+                  style="
+                    background-image: url('/img/wishList-priority-true.svg');
+                  "
+                  class="wish__item__priority first__heart"
+                ></div>
+                <div
+                  style="
+                    background-image: url('/img/wishList-priority-true.svg');
+                  "
+                  class="wish__item__priority second__heart"
+                ></div>
+                <div class="wish__item__priority third__heart"></div>
+              </div>
+              <div class="task-actions">
+                <button class="complete-btn"></button>
+                <button class="change-btn"></button>
+                <button class="delete-btn"></button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <script src="script/burger_menu.js"></script>
+    <script src="script/wishList.js"></script>
+  </body>
+</html>

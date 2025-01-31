@@ -10,6 +10,19 @@ body {
   overflow: hidden;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+section {
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
 .counter {
   font-size: 24px;
   color: rgb(193, 45, 136);
@@ -205,7 +218,9 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.time-counter-page {
+.time-counter-page,
+.container,
+.items__wishList {
   text-align: center;
   padding: 20px 30px;
   background-color: #ffe6f2;
@@ -218,6 +233,103 @@ body {
   align-items: center;
   box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4),
     0 -5px 15px rgba(255, 105, 180, 0.2), 0 10px 30px rgba(238, 0, 255, 0.2);
+}
+
+.items__wishList {
+  background-color: #ff66b2 !important ;
+}
+
+.items__wishList {
+  width: 100%;
+  padding: 20px;
+  background-color: #ffe6f2;
+  color: #ff3385;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4),
+    0 -5px 15px rgba(255, 105, 180, 0.2), 0 10px 30px rgba(238, 0, 255, 0.2);
+}
+
+.items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.wish-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  background: #ffe6f2;
+  border-radius: 20px;
+  padding: 15px;
+  margin: 10px 0;
+  box-shadow: 0px 4px 10px rgba(255, 105, 180, 0.2);
+  transition: transform 0.5s ease, box-shadow 0.2s ease;
+}
+
+.wish-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0px 6px 15px rgba(255, 105, 180, 0.3);
+}
+
+.task-number {
+  font-weight: bold;
+  color: #ff3385;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.task-title {
+  font-size: 18px;
+  color: #ff66b2;
+  font-weight: bold;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.task-description {
+  font-size: 16px;
+  color: #ff3385;
+  flex-grow: 2;
+  text-align: left;
+}
+
+.task-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.task-actions button {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 20%;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.task-actions button:hover {
+  transform: scale(1.1);
+}
+
+.complete-btn {
+  background-image: url("/img/complete.svg");
+  background-size: cover;
+}
+
+.change-btn {
+  background-color: #f77ee1;
+  background-image: url("/img/edit.svg");
+  background-size: cover;
+}
+
+.delete-btn {
+  background-color: #f77ee1;
+  background-image: url("/img/trash.svg");
+  background-size: cover;
 }
 
 .counter-title {
@@ -265,7 +377,14 @@ body {
   color: #ff69b4;
 }
 
-.back-button {
+.button {
+  display: flex;
+  gap: 20px;
+}
+
+.back-button,
+.next-button,
+#submit_button {
   margin-top: 30px;
   display: inline-block;
   text-decoration: none;
@@ -275,9 +394,104 @@ body {
   padding: 10px 20px;
   border-radius: 10px;
   transition: all 0.3s ease;
+  border: none;
 }
 
-.back-button:hover {
+.main__section-items__wishList {
+  margin-top: 100px;
+}
+
+.wish_item__link {
+  margin: 0 auto !important;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 18px;
+  color: #ff66b2;
+  background-color: #ffe6f2;
+  transition: all 0.5s ease;
+  border: none;
+}
+
+.wish_item__link a {
+  color: inherit;
+  font-size: inherit;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.wish_item__link:hover {
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #ff66b2;
+}
+
+.wish_item__link:hover a {
+  color: #fff;
+}
+
+.wish_item__link a:hover {
+  color: #fff;
+  background-color: #ff66b2;
+}
+
+.back-button:hover,
+.next-button:hover,
+#submit_button:hover {
   background-color: #ff3385;
   transform: scale(1.1);
+}
+
+.form__actions {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+input,
+textarea {
+  max-width: 100%;
+  padding: 10px 20px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+
+.priority__svg {
+  display: flex;
+  gap: 5px;
+}
+
+.taskPriority-img,
+.wish__item__priority {
+  width: 30px;
+  height: 30px;
+  background-image: url("/img/wishList-priority-false.svg");
+  background-size: cover;
+  border: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.taskPriority-img:hover {
+  background-image: url("/img/wishList-priority-true.svg");
+}
+
+#wish__price-current {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+
+#wish__price-current:hover {
+  border: 1px solid #007bff;
+}
+
+#priceTitile {
+  width: 4%;
 }
