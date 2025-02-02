@@ -4,13 +4,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   margin: 0;
   font-family: "Comic Sans MS", cursive;
-  overflow: hidden;
 }
 
 main {
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
 }
@@ -259,12 +258,11 @@ a {
 
 .wish-item {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  flex-direction: column;
   justify-content: space-between;
   background: #ffe6f2;
   border-radius: 20px;
-  padding: 15px;
+  padding: 25px;
   margin: 10px 0;
   box-shadow: 0px 4px 10px rgba(255, 105, 180, 0.2);
   transition: transform 0.5s ease, box-shadow 0.2s ease;
@@ -302,7 +300,8 @@ a {
   gap: 10px;
 }
 
-.task-actions button {
+.task-actions button,
+.toggle-btn {
   width: 35px;
   height: 35px;
   border: none;
@@ -397,8 +396,12 @@ a {
   border: none;
 }
 
-.main__section-items__wishList {
+.main__section-add__wishList {
   margin-top: 100px;
+}
+
+.main__section-items__wishList {
+  margin: 100px 0;
 }
 
 .wish_item__link {
@@ -410,6 +413,7 @@ a {
   background-color: #ffe6f2;
   transition: all 0.5s ease;
   border: none;
+  font-weight: bold;
 }
 
 .wish_item__link a {
@@ -420,8 +424,10 @@ a {
 }
 
 .wish_item__link:hover {
+  color: #fff;
+
   padding: 10px 20px;
-  border-radius: 10px;
+  border-radius: 40px;
   background-color: #ff66b2;
 }
 
@@ -494,4 +500,139 @@ textarea {
 
 #priceTitile {
   width: 4%;
+}
+
+.wish__show__content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.wish__hide__content {
+  margin-top: 20px;
+}
+
+.details {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-top: 1px solid #ddd;
+  background: #f9f9f9;
+  padding: 0 15px;
+  border-radius: 10px;
+  transition: height 0.5s ease-in-out, opacity 0.3s ease-in-out,
+    padding 0.3s ease-in-out;
+}
+
+.toggle-btn {
+  margin-top: 15px;
+  background-size: cover;
+  background: url("/img/toggle.svg");
+  cursor: pointer;
+  transition: transform 0.8s ease;
+}
+
+.toggle-btn.open {
+  transform: rotate(180deg);
+}
+
+.details.open {
+  height: auto; /* В JS заменим */
+  opacity: 1;
+  padding: 15px;
+}
+
+.toggle {
+  display: flex;
+  gap: 20px;
+}
+
+.toggle__text {
+  margin: 20px 0;
+}
+
+.exchange__form {
+  display: flex;
+  gap: 20px;
+}
+
+.wish__currency-input {
+  min-width: 40px;
+  padding: 0 10px;
+}
+
+.exchange__output {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 5px;
+  background: white;
+  width: fit-content;
+}
+
+.exchange__output input {
+  border: none;
+  outline: none;
+  width: 60px;
+  padding: 5px;
+  font-size: 16px;
+  text-align: right;
+}
+
+.exchange__output select {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  padding: 5px;
+}
+
+.wish__currency-input {
+  cursor: not-allowed;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+#notificationMessage {
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #ffb3e6;
+  border-radius: 5px;
+  color: #fff;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+#notificationMessage.good {
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #ffb3e6;
+  border: 0px 4px 10px rgba(255, 105, 180, 0.3);
+  border-radius: 5px;
+  color: #ff3385;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+#notificationMessage.fail {
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #660033;
+  border: 0px 4px 10px rgba(255, 0, 102, 0.4);
+  border-radius: 5px;
+  color: #ff99cc;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }

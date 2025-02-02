@@ -34,33 +34,31 @@
                 <input
                   type="text"
                   id="taskTitle"
+                  class="taskTitle"
                   name="title"
                   placeholder="Your name"
                   required
                 />
                 <input
                   type="text"
-                  id="taskTitle"
-                  name="title"
+                  id="taskUrl"
+                  class="taskUrl"
+                  name="url"
                   placeholder="Link to your wish"
                   required
                 />
               </div>
 
-              <input
-                type="text"
-                id="priceTitile"
-                name="title"
-                placeholder="Price"
-                required
-              />
-              <select id="wish__price-current" name="priority" required>
-                <option value="PLN">zł (PLN)</option>
-                <option value="USD">$ (USD)</option>
-                <option value="EUR">€ (EUR)</option>
-                <option value="UAH">₴ (UAH)</option>
-                <option value="KRW">₩ (KRW)</option>
-              </select>
+              <div class="exchange__output">
+                <input type="number" placeholder="Price" class="price__input" />
+                <select class="select__currency">
+                  <option value="PLN">zł (PLN)</option>
+                  <option value="USD">$ (USD)</option>
+                  <option value="EUR">€ (EUR)</option>
+                  <option value="UAH">₴ (UAH)</option>
+                  <option value="KRW">₩ (KRW)</option>
+                </select>
+              </div>
 
               <label for="taskPriority">Priority of your wish:</label>
               <div class="priority__svg">
@@ -70,57 +68,83 @@
               </div>
             </div>
 
-            <button id="submit_button" type="submit">Добавить задачу</button>
+            <button id="submit_button" class="submit_button" type="submit">
+              Добавить задачу
+            </button>
           </form>
-          <div id="responseMessage" class="hide"></div>
+          <div id="notificationMessage" class="hide">Сообщение</div>
         </div>
       </section>
 
       <section class="main__section-items__wishList">
         <div class="items__wishList">
           <ul class="items-list">
-            <!-- <li class="wish-item">
-              <span class="task-number">1.</span>
-              <span class="task-title">Иванка хочет</span>
-              <button class="wish_item__link">
-                <a href="https://makeup.pl/product/642077/">Подарочек :)</a>
-              </button>
-              <div class="task-actions">
-                <button class="complete-btn"></button>
-                <button class="change-btn"></button>
-                <button class="delete-btn"></button>
-              </div>
-            </li> -->
             <li class="wish-item">
-              <span class="task-number">1.</span>
-              <span class="task-title">Иванка хочет</span>
-              <button class="wish_item__link">
+              <div class="wish__show__content">
+                <span class="task-number">1.</span>
+                <span class="task-title">Иванка wants</span>
                 <a
-                  class="wish_item-link"
+                  class="wish_item-link wish_item__link"
                   href="https://makeup.pl/product/642077/"
-                  >подарочек :)</a
+                  >a gift :)</a
                 >
-              </button>
-              <label for="taskPriority">Priority : </label>
-              <div class="priority__svg">
-                <div
-                  style="
-                    background-image: url('/img/wishList-priority-true.svg');
-                  "
-                  class="wish__item__priority first__heart"
-                ></div>
-                <div
-                  style="
-                    background-image: url('/img/wishList-priority-true.svg');
-                  "
-                  class="wish__item__priority second__heart"
-                ></div>
-                <div class="wish__item__priority third__heart"></div>
+                <label for="taskPriority">Priority : </label>
+                <div class="priority__svg">
+                  <div
+                    style="
+                      background-image: url('/img/wishList-priority-true.svg');
+                    "
+                    class="wish__item__priority first__heart"
+                  ></div>
+                  <div
+                    style="
+                      background-image: url('/img/wishList-priority-true.svg');
+                    "
+                    class="wish__item__priority second__heart"
+                  ></div>
+                  <div class="wish__item__priority third__heart"></div>
+                </div>
+                <div class="task-actions">
+                  <button class="complete-btn"></button>
+                  <button class="change-btn"></button>
+                  <button class="delete-btn"></button>
+                </div>
               </div>
-              <div class="task-actions">
-                <button class="complete-btn"></button>
-                <button class="change-btn"></button>
-                <button class="delete-btn"></button>
+              <div class="wish__hide__content">
+                <div class="details">
+                  <p>
+                    Link:
+                    <a href="https://example.com" target="_blank"
+                      >https://example.com</a
+                    >
+                  </p>
+                  <div class="exchange__form">
+                    <p>Exchange gift's price :</p>
+                    <input
+                      type="text"
+                      id="priceTitile"
+                      class="wish__currency-input"
+                    />
+                    <p>to</p>
+                    <div class="exchange__output">
+                      <input type="number" placeholder="0" />
+                      <select>
+                        <option value="PLN">zł (PLN)</option>
+                        <option value="USD">$ (USD)</option>
+                        <option value="EUR">€ (EUR)</option>
+                        <option value="UAH">₴ (UAH)</option>
+                        <option value="KRW">₩ (KRW)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="wish-added">
+                    <p class="wish__added">Wish was add : "01.02.2025"</p>
+                  </div>
+                </div>
+                <div class="toggle">
+                  <button class="toggle-btn"></button>
+                  <p class="toggle__text">Get more info</p>
+                </div>
               </div>
             </li>
           </ul>
