@@ -483,6 +483,14 @@ textarea {
   background-image: url("/img/wishList-priority-true.svg");
 }
 
+.true {
+  background-image: url("/img/wishList-priority-true.svg");
+}
+
+.false {
+  background-image: url("/img/wishList-priority-false.svg");
+}
+
 #wish__price-current {
   background-color: #fff;
   border-radius: 8px;

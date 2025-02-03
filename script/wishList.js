@@ -11,17 +11,22 @@ window.addEventListener("DOMContentLoaded", () => {
   function hoverOnHeart(list) {
     list.forEach((item, index) => {
       item.addEventListener("mouseenter", () => {
-        for (let i = 0; i <= index; i++) {
-          list[i].style.backgroundImage =
-            "url('/img/wishList-priority-true.svg')";
-        }
+        list.forEach((el, i) => {
+          if (i <= index) {
+            el.classList.add("true");
+            el.classList.remove("false");
+          } else {
+            el.classList.remove("true");
+            el.classList.add("false");
+          }
+        });
       });
 
       item.addEventListener("mouseleave", () => {
         list.forEach((el, i) => {
           if (i > selectedIndex) {
-            el.style.backgroundImage =
-              "url('/img/wishList-priority-false.svg')";
+            el.classList.remove("true");
+            el.classList.add("false");
           }
         });
       });
@@ -38,13 +43,13 @@ window.addEventListener("DOMContentLoaded", () => {
         if (parent) {
           parent.setAttribute("data-priority", index + 1);
         }
-
         list.forEach((el, i) => {
           if (i <= index) {
-            el.style.backgroundImage = "url('/img/wishList-priority-true.svg')";
+            el.classList.add("true");
+            el.classList.remove("false");
           } else {
-            el.style.backgroundImage =
-              "url('/img/wishList-priority-false.svg')";
+            el.classList.remove("true");
+            el.classList.add("false");
           }
         });
       });
@@ -52,16 +57,19 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function resetOnClickOutside(list) {
-    document.addEventListener("click", () => {
-      selectedIndex = -1;
-      list.forEach((el) => {
-        el.style.backgroundImage = "url('/img/wishList-priority-false.svg')";
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".priority__svg")) {
+        selectedIndex = -1;
+        list.forEach((el) => {
+          el.classList.remove("true");
+          el.classList.add("false");
 
-        const parent = el.closest(".priority__svg");
-        if (parent) {
-          parent.removeAttribute("data-priority");
-        }
-      });
+          const parent = el.closest(".priority__svg");
+          if (parent) {
+            parent.removeAttribute("data-priority");
+          }
+        });
+      }
     });
   }
 
@@ -136,7 +144,7 @@ window.addEventListener("DOMContentLoaded", () => {
       url: taskUrl.value,
       price: priceInput.value,
       currency: selectCurrency.value,
-      priority: priorityOfWishList.getAttribute("data-priority") || 0,
+      priority: parseInt(priorityOfWishList.getAttribute("data-priority")) || 0,
       time: dateString,
     });
   }
@@ -151,26 +159,52 @@ window.addEventListener("DOMContentLoaded", () => {
     const obj = JSON.parse(formData),
       wishNum = listOfCards.children.length + 1;
 
+    const hearts = {
+      1: ["true", "false", "false"],
+      2: ["true", "true", "false"],
+      3: ["true", "true", "true"],
+      default: ["false", "false", "false"],
+    };
+
+    const [firstHeart, secondHeart, thirdHeart] =
+      hearts[obj.priority] || hearts.default;
+
     const newWish = new WishCard(
       obj.title,
       obj.url,
       obj.price,
       obj.currency,
       obj.priority,
-      obj.time
+      obj.time,
+      firstHeart,
+      secondHeart,
+      thirdHeart
     ).render(wishNum, id);
 
     listOfCards.append(newWish);
   }
 
   class WishCard {
-    constructor(title, url, price, currency, priority, time) {
+    constructor(
+      title,
+      url,
+      price,
+      currency,
+      priority,
+      time,
+      firstHeart,
+      secondHeart,
+      thirdHeart
+    ) {
       this.title = title;
       this.url = url;
       this.price = price;
       this.currency = currency;
       this.priority = priority;
       this.time = time;
+      this.firstHeart = firstHeart;
+      this.secondHeart = secondHeart;
+      this.thirdHeart = thirdHeart;
     }
 
     render(wishNum, wishId) {
@@ -192,18 +226,12 @@ window.addEventListener("DOMContentLoaded", () => {
                 <label for="taskPriority">Priority : </label>
                 <div class="priority__svg">
                   <div
-                    style="
-                      background-image: url('/img/wishList-priority-true.svg');
-                    "
-                    class="wish__item__priority first__heart"
+                    class="wish__item__priority first__heart ${this.firstHeart}"
                   ></div>
                   <div
-                    style="
-                      background-image: url('/img/wishList-priority-true.svg');
-                    "
-                    class="wish__item__priority second__heart"
+                    class="wish__item__priority second__heart ${this.secondHeart}"
                   ></div>
-                  <div class="wish__item__priority third__heart"></div>
+                  <div class="wish__item__priority third__heart ${this.thirdHeart}"></div>
                 </div>
                 <div class="task-actions">
                   <button class="complete-btn"></button>
