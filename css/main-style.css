@@ -266,6 +266,7 @@ a {
   margin: 10px 0;
   box-shadow: 0px 4px 10px rgba(255, 105, 180, 0.2);
   transition: transform 0.5s ease, box-shadow 0.2s ease;
+  transition: all 0.5s ease;
 }
 
 .wish-item:hover {
@@ -277,7 +278,6 @@ a {
   font-weight: bold;
   color: #ff3385;
   font-size: 20px;
-  margin-right: 10px;
 }
 
 .task-title {
@@ -285,7 +285,7 @@ a {
   color: #ff66b2;
   font-weight: bold;
   flex-grow: 1;
-  text-align: left;
+  text-align: center;
 }
 
 .task-description {
@@ -507,7 +507,7 @@ textarea {
 }
 
 #priceTitile {
-  width: 4%;
+  max-width: 17%;
 }
 
 .wish__show__content {
@@ -532,8 +532,8 @@ textarea {
   background: #f9f9f9;
   padding: 0 15px;
   border-radius: 10px;
-  transition: height 0.5s ease-in-out, opacity 0.3s ease-in-out,
-    padding 0.3s ease-in-out;
+  transition: height 0.8s ease-in-out, opacity 0.7s ease-in-out,
+    padding 0.5s ease-in-out;
 }
 
 .toggle-btn {
@@ -643,4 +643,17 @@ textarea {
   border-radius: 5px;
   color: #ff99cc;
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.wishCompleted {
+  background-color: #ffb3e6;
+}
+
+.changeCompleteIcon {
+  background-image: url("/img/completed.svg");
+  background-color: #fff;
+}
+
+.strikethrough {
+  text-decoration: line-through;
 }

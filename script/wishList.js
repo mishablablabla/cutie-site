@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", (event) => {
   // priority functionality
 
   const items = document.querySelectorAll(".taskPriority-img");
@@ -122,14 +122,31 @@ window.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
 
     if (event.target.classList.contains("submit_button")) {
-      const newId = idWishItem(),
-        formData = getFormData();
+      if (taskTitle.value && taskUrl.value) {
+        const newId = idWishItem(),
+          formData = getFormData();
 
-      // cleanList(listOfCards);
-      postFormData(newId, formData);
-      showWishItems(newId, formData);
-      cleanForm(taskTitle, taskUrl, priceInput);
-      formMessage(notificationMessage, "Success", "show", "hide", "good", 4000);
+        postFormData(newId, formData);
+        showWishItems(newId, formData);
+        cleanForm(taskTitle, taskUrl, priceInput);
+        formMessage(
+          notificationMessage,
+          "Success",
+          "show",
+          "hide",
+          "good",
+          4000
+        );
+      } else {
+        formMessage(
+          notificationMessage,
+          "Fill in all the fields",
+          "show",
+          "hide",
+          "fail",
+          4000
+        );
+      }
     }
   });
 
@@ -146,6 +163,7 @@ window.addEventListener("DOMContentLoaded", () => {
       currency: selectCurrency.value,
       priority: parseInt(priorityOfWishList.getAttribute("data-priority")) || 0,
       time: dateString,
+      isCompleted: false,
     });
   }
 
@@ -178,7 +196,8 @@ window.addEventListener("DOMContentLoaded", () => {
       obj.time,
       firstHeart,
       secondHeart,
-      thirdHeart
+      thirdHeart,
+      false
     ).render(wishNum, id);
 
     listOfCards.append(newWish);
@@ -194,7 +213,8 @@ window.addEventListener("DOMContentLoaded", () => {
       time,
       firstHeart,
       secondHeart,
-      thirdHeart
+      thirdHeart,
+      isCompleted
     ) {
       this.title = title;
       this.url = url;
@@ -205,6 +225,7 @@ window.addEventListener("DOMContentLoaded", () => {
       this.firstHeart = firstHeart;
       this.secondHeart = secondHeart;
       this.thirdHeart = thirdHeart;
+      this.isCompleted = isCompleted;
     }
 
     render(wishNum, wishId) {
@@ -253,7 +274,8 @@ window.addEventListener("DOMContentLoaded", () => {
                       type="text"
                       id="priceTitile"
                       class="wish__currency-input"
-                      placeholder="${this.price}"
+                      placeholder="${this.price} ${this.currency}"
+                      readonly
                     />
                     <p>to</p>
                     <div class="exchange__output">
@@ -331,4 +353,63 @@ window.addEventListener("DOMContentLoaded", () => {
       messageDiv.classList.remove(typeOfMessage);
     }, timeMotification);
   }
+
+  // actions with an item
+
+  listOfCards.addEventListener("click", (event) => {
+    if (event.target.classList.contains("complete-btn")) {
+      competeTask(event, "wishCompleted", "strikethrough");
+    } else if (event.target.classList.contains("")) {
+    }
+  });
+
+  function competeTask(event, toggleClass, secondToggleClass) {
+    const parentLi = event.target.closest("li.wish-item"),
+      linkChild = parentLi.querySelector(".wish_item__link");
+
+    changeStatus(parentLi);
+    changeCompleteBtn(parentLi, "changeCompleteIcon");
+    linkChild.classList.toggle(toggleClass);
+    parentLi.classList.toggle(toggleClass);
+    parentLi.classList.toggle(secondToggleClass);
+  }
+
+  function changeStatus(element) {
+    const elementData = JSON.parse(localStorage.getItem(element.dataset.id));
+
+    if (elementData.isCompleted === false) {
+      elementData.isCompleted = true;
+    } else if (elementData.isCompleted === true) {
+      elementData.isCompleted = false;
+    }
+    localStorage.setItem(element.dataset.id, JSON.stringify(elementData));
+  }
+
+  function changeCompleteBtn(element, firstToggleClass) {
+    element.querySelector(".complete-btn").classList.toggle(firstToggleClass);
+  }
+
+  function isWishCompleted() {
+    const listWishes = document.querySelectorAll("li.wish-item");
+    listWishes.forEach((item) => {
+      console.log(item.dataset.id);
+
+      const elementData = JSON.parse(localStorage.getItem(item.dataset.id)),
+        wishLink = item.querySelector(".wish_item__link"),
+        completeBtn = item.querySelector(".complete-btn");
+
+      if (elementData.isCompleted === true) {
+        completeBtn.classList.add("changeCompleteIcon");
+
+        item.classList.add("wishCompleted", "strikethrough");
+        wishLink.classList.add("wishCompleted");
+      } else {
+        completeBtn.classList.remove("changeCompleteIcon");
+
+        item.classList.remove("wishCompleted", "strikethrough");
+        wishLink.classList.remove("wishCompleted");
+      }
+    });
+  }
+  isWishCompleted();
 });
