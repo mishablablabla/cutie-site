@@ -657,3 +657,11 @@ textarea {
 .strikethrough {
   text-decoration: line-through;
 }
+
+.wish__is__done {
+  margin: 0 auto;
+  text-decoration: none !important;
+  padding: 10px 30px;
+  border-radius: 10px;
+  background-color: #ffe6f2;
+}

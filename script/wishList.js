@@ -356,6 +356,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
   // actions with an item
 
+  isWishCompleted();
+
   listOfCards.addEventListener("click", (event) => {
     if (event.target.classList.contains("complete-btn")) {
       competeTask(event, "wishCompleted", "strikethrough");
@@ -363,15 +365,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
     }
   });
 
-  function competeTask(event, toggleClass, secondToggleClass) {
+  function competeTask(event) {
     const parentLi = event.target.closest("li.wish-item"),
       linkChild = parentLi.querySelector(".wish_item__link");
 
     changeStatus(parentLi);
-    changeCompleteBtn(parentLi, "changeCompleteIcon");
-    linkChild.classList.toggle(toggleClass);
-    parentLi.classList.toggle(toggleClass);
-    parentLi.classList.toggle(secondToggleClass);
+    isWishCompleted();
   }
 
   function changeStatus(element) {
@@ -385,15 +384,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
     localStorage.setItem(element.dataset.id, JSON.stringify(elementData));
   }
 
-  function changeCompleteBtn(element, firstToggleClass) {
-    element.querySelector(".complete-btn").classList.toggle(firstToggleClass);
-  }
-
   function isWishCompleted() {
     const listWishes = document.querySelectorAll("li.wish-item");
     listWishes.forEach((item) => {
-      console.log(item.dataset.id);
-
       const elementData = JSON.parse(localStorage.getItem(item.dataset.id)),
         wishLink = item.querySelector(".wish_item__link"),
         completeBtn = item.querySelector(".complete-btn");
@@ -411,5 +404,4 @@ window.addEventListener("DOMContentLoaded", (event) => {
       }
     });
   }
-  isWishCompleted();
 });
