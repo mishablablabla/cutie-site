@@ -237,6 +237,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
       li.innerHTML = `
          <div class="wish__show__content">
+         <div class="content">
                 <span class="task-number">${wishNum}.</span>
                 <span class="task-title">${this.title} wants</span>
                 <a
@@ -259,6 +260,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
                   <button class="change-btn"></button>
                   <button class="delete-btn"></button>
                 </div>
+              </div>
               </div>
               <div class="wish__hide__content">
                 <div class="details">
@@ -331,7 +333,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
   // notifications
 
-  const notificationMessage = document.querySelector("#notificationMessage");
+  const notificationMessage = document.querySelector("#notificationMessage"),
+    responseMessage = document.querySelector("#responseMessage");
 
   function formMessage(
     messageDiv,
@@ -361,13 +364,16 @@ window.addEventListener("DOMContentLoaded", (event) => {
   listOfCards.addEventListener("click", (event) => {
     if (event.target.classList.contains("complete-btn")) {
       competeTask(event, "wishCompleted", "strikethrough");
-    } else if (event.target.classList.contains("")) {
+    } else if (event.target.classList.contains("delete-btn")) {
+      deleteWish(event);
+    } else if (event.target.classList.contains("change-btn")) {
+      changeWishData(event);
     }
   });
 
+  // complete wish btn
   function competeTask(event) {
-    const parentLi = event.target.closest("li.wish-item"),
-      linkChild = parentLi.querySelector(".wish_item__link");
+    const parentLi = event.target.closest("li.wish-item");
 
     changeStatus(parentLi);
     isWishCompleted();
@@ -403,5 +409,170 @@ window.addEventListener("DOMContentLoaded", (event) => {
         wishLink.classList.remove("wishCompleted");
       }
     });
+  }
+
+  // delete wish btn
+
+  function deleteWish(event) {
+    const parentLi = event.target.closest("li.wish-item");
+
+    localStorage.removeItem(parentLi.dataset.id);
+    loadWishes();
+  }
+
+  // change wish data
+
+  function changeWishData(event) {
+    const parentLi = event.target.closest("li.wish-item");
+
+    if (parentLi.classList.contains("wishCompleted")) {
+      formMessage(
+        responseMessage,
+        "You cannot change a wish because it has already been fulfilled.",
+        "show",
+        "hide",
+        "fail",
+        5000
+      );
+    } else {
+      const showContent = parentLi.querySelector(".wish__show__content"),
+        hideData = parentLi.querySelector(".toggle"),
+        content = parentLi.querySelector(".content");
+      form = document.createElement("div");
+
+      form.classList.add("form");
+      hideData.classList.add("hide");
+      content.style.display = "none";
+
+      form.innerHTML = `
+         <div class="form__actions">
+              <div class="titles">
+                <input
+                  type="text"
+                  id="taskTitle"
+                  class="taskTitle"
+                  name="title"
+                  placeholder="Your name"
+                  required
+                />
+                <input
+                  type="text"
+                  id="taskUrl"
+                  class="taskUrl"
+                  name="url"
+                  placeholder="Link to your wish"
+                  required
+                />
+              </div>
+
+              <div class="exchange__output">
+                <input type="number" placeholder="Price" class="price__input" />
+                <select class="select__currency">
+                  <option value="PLN">zł (PLN)</option>
+                  <option value="USD">$ (USD)</option>
+                  <option value="EUR">€ (EUR)</option>
+                  <option value="UAH">₴ (UAH)</option>
+                  <option value="KRW">₩ (KRW)</option>
+                </select>
+              </div>
+
+              <label for="taskPriority">Priority of your wish:</label>
+              <div class="priority__svg">
+                <div class="taskPriority-img first__heart"></div>
+                <div class="taskPriority-img second__heart"></div>
+                <div class="taskPriority-img third__heart"></div>
+              </div>
+            </div>
+      `;
+
+      showContent.append(form);
+
+      const items = parentLi.querySelectorAll(".taskPriority-img");
+
+      hoverOnHeart(items);
+      downHeart(items);
+      resetOnClickOutside(items);
+
+      // add buttons to save or undo changig
+
+      const btnsDiv = document.createElement("div"),
+        saveBtn = document.createElement("button"),
+        cancelBtn = document.createElement("button");
+
+      saveBtn.classList.add("submit_button");
+      saveBtn.textContent = "Save";
+
+      cancelBtn.classList.add("submit_button");
+      cancelBtn.textContent = "Cancel";
+
+      btnsDiv.classList.add("butons__div");
+
+      btnsDiv.append(cancelBtn, saveBtn);
+      parentLi.append(btnsDiv);
+
+      saveBtn.addEventListener("click", (event) => {
+        saveChanges(event);
+      });
+
+      cancelBtn.addEventListener("click", () => {
+        hideData.classList.remove("hide");
+        hideData.style.display = "";
+        content.style.display = "";
+        saveBtn.remove();
+        form.remove();
+        cancelBtn.remove();
+
+        formMessage(
+          responseMessage,
+          "Action canceled",
+          "show",
+          "hide",
+          "success",
+          5000
+        );
+      });
+    }
+  }
+
+  function saveChanges(event) {
+    const parentLi = event.target.closest("li.wish-item"),
+      wishTitle = parentLi.querySelector(".taskTitle").value,
+      wishLink = parentLi.querySelector(".taskUrl").value,
+      wishInput = parentLi.querySelector(".price__input").value,
+      priority = parentLi.querySelectorAll(".taskPriority-img"),
+      id = parentLi.dataset.id;
+
+    let storageData = JSON.parse(localStorage.getItem(id)),
+      numPriority = 0;
+
+    priority.forEach((item) => {
+      if (item.classList.contains("true")) {
+        numPriority++;
+      }
+    });
+
+    const newObj = {
+      title: wishTitle,
+      url: wishLink,
+      price: wishInput,
+      currency: storageData.currency,
+      priority: numPriority,
+      time: storageData.time,
+      isCompleted: storageData.isCompleted,
+    };
+
+    localStorage.setItem(id, JSON.stringify(newObj));
+
+    loadWishes();
+    numPriority = 0;
+
+    formMessage(
+      responseMessage,
+      "Successfully saved.",
+      "show",
+      "hide",
+      "success",
+      5000
+    );
   }
 });
