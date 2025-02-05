@@ -587,7 +587,7 @@ textarea {
 .exchange__output input {
   border: none;
   outline: none;
-  width: 60px;
+  min-width: 100px;
   padding: 5px;
   font-size: 16px;
   text-align: right;
@@ -728,4 +728,8 @@ textarea {
     opacity: 0;
     transform: translateX(-100%);
   }
+}
+
+.wish__currency-output {
+  cursor: not-allowed;
 }

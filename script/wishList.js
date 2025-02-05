@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", (event) => {
+window.addEventListener("DOMContentLoaded", () => {
   // priority functionality
 
   const items = document.querySelectorAll(".taskPriority-img");
@@ -82,6 +82,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
       const hideDiv = event.target.closest(".wish__hide__content"),
         hideContent = hideDiv.querySelector(".details"),
         toggleText = event.target.nextElementSibling;
+      convertation(event);
       if (toggleText.textContent === "Get more info") {
         toggleDetails(hideContent, event.target, toggleText, "Hide", "open");
       } else {
@@ -123,20 +124,31 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     if (event.target.classList.contains("submit_button")) {
       if (taskTitle.value && taskUrl.value) {
-        const newId = idWishItem(),
-          formData = getFormData();
+        if (isValidUrl(taskUrl.value)) {
+          const newId = idWishItem(),
+            formData = getFormData();
 
-        postFormData(newId, formData);
-        showWishItems(newId, formData);
-        cleanForm(taskTitle, taskUrl, priceInput);
-        formMessage(
-          notificationMessage,
-          "Success",
-          "show",
-          "hide",
-          "good",
-          4000
-        );
+          postFormData(newId, formData);
+          showWishItems(newId, formData);
+          cleanForm(taskTitle, taskUrl, priceInput);
+          formMessage(
+            notificationMessage,
+            "Success",
+            "show",
+            "hide",
+            "good",
+            4000
+          );
+        } else {
+          formMessage(
+            notificationMessage,
+            "Oops! That doesn’t look like a valid link. Try again.",
+            "show",
+            "hide",
+            "fail",
+            4000
+          );
+        }
       } else {
         formMessage(
           notificationMessage,
@@ -149,6 +161,15 @@ window.addEventListener("DOMContentLoaded", (event) => {
       }
     }
   });
+
+  function isValidUrl(url) {
+    try {
+      new URL(url);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   // get data from localStoragge
 
@@ -197,7 +218,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
       firstHeart,
       secondHeart,
       thirdHeart,
-      false
+      false,
+      obj.updatedAt
     ).render(wishNum, id);
 
     listOfCards.append(newWish);
@@ -214,7 +236,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
       firstHeart,
       secondHeart,
       thirdHeart,
-      isCompleted
+      isCompleted,
+      updatedAt
     ) {
       this.title = title;
       this.url = url;
@@ -226,6 +249,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
       this.secondHeart = secondHeart;
       this.thirdHeart = thirdHeart;
       this.isCompleted = isCompleted;
+      this.updatedAt = updatedAt;
     }
 
     render(wishNum, wishId) {
@@ -251,9 +275,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
                     class="wish__item__priority first__heart ${this.firstHeart}"
                   ></div>
                   <div
-                    class="wish__item__priority second__heart ${this.secondHeart}"
+                    class="wish__item__priority second__heart ${
+                      this.secondHeart
+                    }"
                   ></div>
-                  <div class="wish__item__priority third__heart ${this.thirdHeart}"></div>
+                  <div class="wish__item__priority third__heart ${
+                    this.thirdHeart
+                  }"></div>
                 </div>
                 <div class="task-actions">
                   <button class="complete-btn"></button>
@@ -281,18 +309,22 @@ window.addEventListener("DOMContentLoaded", (event) => {
                     />
                     <p>to</p>
                     <div class="exchange__output">
-                      <input type="number" placeholder="0" />
-                      <select>
+                      <input type="number" class="wish__currency-output" placeholder="0" readonly />
+                      <select  class="wish__currency-selected">
                         <option value="PLN">zł (PLN)</option>
                         <option value="USD">$ (USD)</option>
                         <option value="EUR">€ (EUR)</option>
-                        <option value="UAH">₴ (UAH)</option>
                         <option value="KRW">₩ (KRW)</option>
                       </select>
                     </div>
                   </div>
                   <div class="wish-added">
                     <p class="wish__added">Wish was add : "${this.time}"</p>
+                      ${
+                        this.updatedAt
+                          ? `<p class="wish__added wish__changed">Last updated : "${this.updatedAt}"</p>`
+                          : ""
+                      }
                   </div>
                 </div>
                 <div class="toggle">
@@ -563,34 +595,103 @@ window.addEventListener("DOMContentLoaded", (event) => {
     let storageData = JSON.parse(localStorage.getItem(id)),
       numPriority = 0;
 
-    priority.forEach((item) => {
-      if (item.classList.contains("true")) {
-        numPriority++;
+    if (wishTitle && wishLink) {
+      const currentDate = new Date(),
+        dateString = currentDate.toLocaleDateString();
+
+      priority.forEach((item) => {
+        if (item.classList.contains("true")) {
+          numPriority++;
+        }
+      });
+
+      const newObj = {
+        title: wishTitle,
+        url: wishLink,
+        price: wishInput,
+        currency: storageData.currency,
+        priority: numPriority,
+        time: storageData.time,
+        isCompleted: storageData.isCompleted,
+        updatedAt: dateString,
+      };
+
+      localStorage.setItem(id, JSON.stringify(newObj));
+
+      loadWishes();
+      numPriority = 0;
+
+      formMessage(
+        responseMessage,
+        "Successfully saved.",
+        "show",
+        "hide",
+        "success",
+        5000
+      );
+    } else {
+      formMessage(
+        responseMessage,
+        "Fill in all the fields.",
+        "show",
+        "hide",
+        "fail",
+        5000
+      );
+    }
+  }
+
+  // converter in wish items
+
+  async function convertation(event) {
+    const parentLi = event.target.closest("li.wish-item"),
+      output = parentLi.querySelector(".wish__currency-output"),
+      whichSelect = parentLi.querySelector(".wish__currency-selected").value;
+
+    const dataItem = JSON.parse(localStorage.getItem(parentLi.dataset.id));
+
+    try {
+      const response = await fetch(
+        `https://api.frankfurter.dev/v1/latest?base=${dataItem.currency}`
+      );
+
+      if (!response.ok) {
+        console.log(`Ошибка: ${response.status}`);
+        throw new Error(`Ошибка: ${response.status}`);
       }
-    });
 
-    const newObj = {
-      title: wishTitle,
-      url: wishLink,
-      price: wishInput,
-      currency: storageData.currency,
-      priority: numPriority,
-      time: storageData.time,
-      isCompleted: storageData.isCompleted,
-    };
+      if (whichSelect === dataItem.currency) {
+        formMessage(
+          responseMessage,
+          "Choose diferent currency.",
+          "show",
+          "hide",
+          "fail",
+          5000
+        );
+        output.value = 0;
+      } else {
+        const selectedCurrency = parentLi.querySelectorAll(
+          ".wish__currency-selected"
+        );
 
-    localStorage.setItem(id, JSON.stringify(newObj));
+        selectedCurrency.forEach((item) => {
+          item.addEventListener("change", (event) => {
+            convertation(event);
+          });
+        });
 
-    loadWishes();
-    numPriority = 0;
+        const data = await response.json();
+        const currencyValue = data.rates[whichSelect];
 
-    formMessage(
-      responseMessage,
-      "Successfully saved.",
-      "show",
-      "hide",
-      "success",
-      5000
-    );
+        console.log(currencyValue, whichSelect);
+
+        output.value = (dataItem.price * currencyValue).toFixed(2);
+      }
+
+      console.log("fromfetch");
+    } catch (error) {
+      console.error(error);
+    }
   }
 });
