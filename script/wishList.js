@@ -384,6 +384,15 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     if (elementData.isCompleted === false) {
       elementData.isCompleted = true;
+
+      formMessage(
+        responseMessage,
+        "Wish is fulfilled :)",
+        "show",
+        "hide",
+        "success",
+        5000
+      );
     } else if (elementData.isCompleted === true) {
       elementData.isCompleted = false;
     }
@@ -418,6 +427,15 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     localStorage.removeItem(parentLi.dataset.id);
     loadWishes();
+
+    formMessage(
+      responseMessage,
+      "Succesfully delited",
+      "show",
+      "hide",
+      "success",
+      4000
+    );
   }
 
   // change wish data
@@ -432,7 +450,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         "show",
         "hide",
         "fail",
-        5000
+        7000
       );
     } else {
       const showContent = parentLi.querySelector(".wish__show__content"),
