@@ -450,6 +450,7 @@ a {
 
 .form__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   align-items: center;
   justify-content: center;
@@ -509,6 +510,7 @@ textarea {
 
 #priceTitile {
   max-width: 17%;
+  min-height: 50px;
 }
 
 .wish__show__content {
@@ -566,6 +568,7 @@ textarea {
 
 .exchange__form {
   display: flex;
+  align-items: center;
   gap: 20px;
 }
 
@@ -579,9 +582,9 @@ textarea {
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 5px;
   background: white;
   width: fit-content;
+  min-height: 50px;
 }
 
 .exchange__output input {
@@ -732,4 +735,14 @@ textarea {
 
 .wish__currency-output {
   cursor: not-allowed;
+}
+
+.changeTitle {
+  margin-bottom: 10px;
+}
+
+.changeForm {
+  max-width: 100%;
+  padding: 10px;
+  overflow: hidden;
 }

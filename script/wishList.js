@@ -81,7 +81,15 @@ window.addEventListener("DOMContentLoaded", () => {
     if (event.target.classList.contains("toggle-btn")) {
       const hideDiv = event.target.closest(".wish__hide__content"),
         hideContent = hideDiv.querySelector(".details"),
-        toggleText = event.target.nextElementSibling;
+        toggleText = event.target.nextElementSibling,
+        parentLi = event.target.closest("li.wish-item");
+
+      parentLi
+        .querySelector(".wish__currency-selected")
+        .addEventListener("change", () => {
+          convertation(event);
+        });
+
       convertation(event);
       if (toggleText.textContent === "Get more info") {
         toggleDetails(hideContent, event.target, toggleText, "Hide", "open");
@@ -223,6 +231,7 @@ window.addEventListener("DOMContentLoaded", () => {
     ).render(wishNum, id);
 
     listOfCards.append(newWish);
+    return newWish;
   }
 
   class WishCard {
@@ -346,9 +355,21 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const allWishes = Object.entries(localStorage);
 
-    allWishes.forEach((item) => {
-      showWishItems(item[0], item[1]);
+    allWishes.forEach(([id, data]) => {
+      const wishItem = showWishItems(id, data);
+      isCompletedWish(wishItem);
     });
+  }
+
+  function isCompletedWish(item) {
+    const id = item.dataset.id,
+      data = JSON.parse(localStorage.getItem(id));
+
+    if (data && data.isCompleted) {
+      item.classList.add("wishCompleted");
+      item.classList.add("strikethrough");
+      item.querySelector(".wish_item__link").classList.add("wishCompleted");
+    }
   }
 
   function cleanList(list) {
@@ -495,12 +516,12 @@ window.addEventListener("DOMContentLoaded", () => {
       content.style.display = "none";
 
       form.innerHTML = `
-         <div class="form__actions">
+         <div class="form__actions changeForm">
               <div class="titles">
                 <input
                   type="text"
                   id="taskTitle"
-                  class="taskTitle"
+                  class="taskTitle changeTitle"
                   name="title"
                   placeholder="Your name"
                   required
