@@ -87,12 +87,13 @@ window.addEventListener("DOMContentLoaded", () => {
       parentLi
         .querySelector(".wish__currency-selected")
         .addEventListener("change", () => {
-          convertation(event);
+          getCurrencyDataFromLS(parentLi);
         });
 
-      convertation(event);
       if (toggleText.textContent === "Get more info") {
         toggleDetails(hideContent, event.target, toggleText, "Hide", "open");
+
+        getCurrencyDataFromLS(parentLi);
       } else {
         toggleDetails(
           hideContent,
@@ -193,18 +194,22 @@ window.addEventListener("DOMContentLoaded", () => {
       priority: parseInt(priorityOfWishList.getAttribute("data-priority")) || 0,
       time: dateString,
       isCompleted: false,
+      isCurrency: false,
     });
   }
 
   // post on the localStorage & class for cards
+
+  const listOfCurrency = ["PLN", "USD", "EUR", "KRW"];
 
   function postFormData(id, obj) {
     localStorage.setItem(id, obj);
   }
 
   function showWishItems(id, formData) {
-    const obj = JSON.parse(formData),
-      wishNum = listOfCards.children.length + 1;
+    const obj = JSON.parse(formData);
+
+    const wishNum = listOfCards.children.length + 1;
 
     const hearts = {
       1: ["true", "false", "false"],
@@ -227,9 +232,13 @@ window.addEventListener("DOMContentLoaded", () => {
       secondHeart,
       thirdHeart,
       false,
-      obj.updatedAt
+      obj.updatedAt,
+      false
     ).render(wishNum, id);
 
+    if (obj.isCurrency) {
+      // return;
+    }
     listOfCards.append(newWish);
     return newWish;
   }
@@ -246,7 +255,8 @@ window.addEventListener("DOMContentLoaded", () => {
       secondHeart,
       thirdHeart,
       isCompleted,
-      updatedAt
+      updatedAt,
+      isCurrency
     ) {
       this.title = title;
       this.url = url;
@@ -259,6 +269,7 @@ window.addEventListener("DOMContentLoaded", () => {
       this.thirdHeart = thirdHeart;
       this.isCompleted = isCompleted;
       this.updatedAt = updatedAt;
+      this.isCurrency = isCurrency;
     }
 
     render(wishNum, wishId) {
@@ -321,7 +332,7 @@ window.addEventListener("DOMContentLoaded", () => {
                       <input type="number" class="wish__currency-output" placeholder="0" readonly />
                       <select  class="wish__currency-selected">
                         <option value="PLN">zł (PLN)</option>
-                        <option value="USD">$ (USD)</option>
+                        <option selected value="USD">$ (USD)</option>
                         <option value="EUR">€ (EUR)</option>
                         <option value="KRW">₩ (KRW)</option>
                       </select>
@@ -353,11 +364,13 @@ window.addEventListener("DOMContentLoaded", () => {
   function loadWishes() {
     cleanList(listOfCards);
 
-    const allWishes = Object.entries(localStorage);
-
-    allWishes.forEach(([id, data]) => {
-      const wishItem = showWishItems(id, data);
-      isCompletedWish(wishItem);
+    const allItems = Object.entries(localStorage);
+    allItems.forEach(([id, data]) => {
+      const parsedData = JSON.parse(data);
+      if (!parsedData.isCurrency) {
+        const wishItem = showWishItems(id, data);
+        isCompletedWish(wishItem);
+      }
     });
   }
 
@@ -635,6 +648,7 @@ window.addEventListener("DOMContentLoaded", () => {
         time: storageData.time,
         isCompleted: storageData.isCompleted,
         updatedAt: dateString,
+        isCurrency: false,
       };
 
       localStorage.setItem(id, JSON.stringify(newObj));
@@ -664,55 +678,138 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // converter in wish items
 
-  async function convertation(event) {
-    const parentLi = event.target.closest("li.wish-item"),
-      output = parentLi.querySelector(".wish__currency-output"),
-      whichSelect = parentLi.querySelector(".wish__currency-selected").value;
+  // async function convertation(event) {
+  //   const parentLi = event.target.closest("li.wish-item"),
+  //     output = parentLi.querySelector(".wish__currency-output"),
+  //     whichSelect = parentLi.querySelector(".wish__currency-selected").value;
 
-    const dataItem = JSON.parse(localStorage.getItem(parentLi.dataset.id));
+  //   const dataItem = JSON.parse(localStorage.getItem(parentLi.dataset.id));
 
-    try {
-      const response = await fetch(
-        `https://api.frankfurter.dev/v1/latest?base=${dataItem.currency}`
+  //   try {
+  //     const response = await fetch(
+  //       `https://api.frankfurter.dev/v1/latest?base=${dataItem.currency}`
+  //     );
+
+  //     if (!response.ok) {
+  //       console.log(`Ошибка: ${response.status}`);
+  //       throw new Error(`Ошибка: ${response.status}`);
+  //     }
+
+  //     if (whichSelect === dataItem.currency) {
+  //       formMessage(
+  //         responseMessage,
+  //         "Choose diferent currency.",
+  //         "show",
+  //         "hide",
+  //         "fail",
+  //         5000
+  //       );
+  //       output.value = 0;
+  //     } else {
+  //       const selectedCurrency = parentLi.querySelectorAll(
+  //         ".wish__currency-selected"
+  //       );
+
+  //       selectedCurrency.forEach((item) => {
+  //         item.addEventListener("change", (event) => {
+  //           convertation(event);
+  //         });
+  //       });
+
+  //       const data = await response.json();
+  //       const currencyValue = data.rates[whichSelect];
+
+  //       console.log(currencyValue, whichSelect);
+
+  //       output.value = (dataItem.price * currencyValue).toFixed(2);
+  //     }
+
+  //     console.log("fromfetch");
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
+  function getCurrencyDataFromLS(parentItem) {
+    const elemntId = parentItem.dataset.id,
+      element = JSON.parse(localStorage.getItem(elemntId)),
+      elementPrice = element.price,
+      elementCurrency = element.currency,
+      baseCurrency = JSON.parse(localStorage.getItem(elementCurrency)),
+      selectedCurrency = parentItem.querySelector(
+        ".wish__currency-selected"
+      ).value,
+      exchangeRate = baseCurrency.rates[selectedCurrency] * elementPrice;
+
+    changeValues(parentItem, exchangeRate);
+
+    if (elementCurrency == selectedCurrency) {
+      formMessage(
+        responseMessage,
+        "Choose diferent currency.",
+        "show",
+        "hide",
+        "fail",
+        5000
       );
-
-      if (!response.ok) {
-        console.log(`Ошибка: ${response.status}`);
-        throw new Error(`Ошибка: ${response.status}`);
-      }
-
-      if (whichSelect === dataItem.currency) {
-        formMessage(
-          responseMessage,
-          "Choose diferent currency.",
-          "show",
-          "hide",
-          "fail",
-          5000
-        );
-        output.value = 0;
-      } else {
-        const selectedCurrency = parentLi.querySelectorAll(
-          ".wish__currency-selected"
-        );
-
-        selectedCurrency.forEach((item) => {
-          item.addEventListener("change", (event) => {
-            convertation(event);
-          });
-        });
-
-        const data = await response.json();
-        const currencyValue = data.rates[whichSelect];
-
-        console.log(currencyValue, whichSelect);
-
-        output.value = (dataItem.price * currencyValue).toFixed(2);
-      }
-
-      console.log("fromfetch");
-    } catch (error) {
-      console.error(error);
     }
   }
+
+  function changeValues(parentItem, result) {
+    const outputValue = parentItem.querySelector(".wish__currency-output");
+
+    outputValue.value = result;
+  }
+
+  async function setCurrency(arr) {
+    for (let item of arr) {
+      try {
+        console.log(`Запрашиваем данные для ${item}...`);
+        const response = await fetch(
+          `https://api.frankfurter.dev/v1/latest?base=${item}`
+        );
+
+        if (!response.ok) {
+          console.log(`Ошибка: ${response.status}`);
+          throw new Error(`Ошибка: ${response.status}`);
+        }
+
+        const data = await response.json();
+        data.isCurrency = true;
+
+        localStorage.setItem(item, JSON.stringify(data));
+        console.log(`Data forsa ${item} successfully updated in localStorage`);
+      } catch (error) {
+        console.error("Error while updating:", error);
+      }
+    }
+  }
+
+  function fetchOrLoadRates(arr) {
+    const allExist = arr.every((item) => localStorage.getItem(item) !== null);
+
+    if (allExist) {
+      console.log("here");
+    } else {
+      console.log("naah");
+    }
+  }
+
+  fetchOrLoadRates(listOfCurrency);
+
+  // update data in localStorage
+
+  function updateInLS() {
+    let currency = JSON.parse(localStorage.getItem(listOfCurrency[0])),
+      today = new Date().toISOString().split("T")[0];
+
+    if (!currency || currency.date !== today) {
+      console.log("Updating currency...");
+      setCurrency(listOfCurrency);
+    } else {
+      console.log("Data is valid");
+    }
+  }
+
+  updateInLS();
 });
